@@ -1,0 +1,1 @@
+Scripti joka mittaa lämpötilaa ja ilmankosteutta, ilmoittaa käyttäjälle tiedon printtinä tietyin väliajoin paitsi jos jommassakummassa tapahtuu huomattava muutos, jolloin se tekee uuden printin käyttäjälle heti.

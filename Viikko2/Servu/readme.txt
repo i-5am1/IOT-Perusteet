@@ -1,0 +1,1 @@
+Tää scripti on luennolla tehty serveri.

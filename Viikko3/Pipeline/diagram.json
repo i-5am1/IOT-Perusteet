@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "author": "Sami H",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-pi-pico-w",
+      "id": "pico",
+      "top": 0,
+      "left": 0,
+      "attrs": { "env": "micropython-20241129-v1.24.1" }
+    },
+    { "type": "wokwi-dht22", "id": "dht1", "top": -105.3, "left": 157.8, "attrs": {} }
+  ],
+  "connections": [
+    [ "dht1:VCC", "pico:3V3", "red", [ "v0" ] ],
+    [ "dht1:GND", "pico:GND.7", "black", [ "v0" ] ],
+    [ "dht1:SDA", "pico:GP15", "green", [ "v211.2", "h-211.1", "v-28.8" ] ]
+  ],
+  "dependencies": {}
+}

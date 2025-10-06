@@ -1,4 +1,4 @@
-Tämä projekti lukee lämpötila- ja kosteusarvot DHT22-sensorilta ja lähettää ne HTTP POST -pyynnön avulla palvelimelle. Toteutus on tehty MicroPythonilla, ja se on tarkoitettu esimerkiksi ESP32- tai Raspberry Pi Pico W -laitteelle.
+Tämä projekti lukee lämpötila- ja kosteusarvot DHT22-sensorilta ja lähettää ne HTTP POST -pyynnön avulla palvelimelle.
 
 Ominaisuudet:
 

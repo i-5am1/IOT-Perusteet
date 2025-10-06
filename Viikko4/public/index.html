@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>IoT Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    canvas { max-width: 900px; }
+  </style>
+</head>
+<body>
+  <h1>IoT Dashboard</h1>
+  <p id="status">Connecting...</p>
+  <canvas id="tempChart" height="120"></canvas>
+  <canvas id="humChart" height="120"></canvas>
+
+  <script>
+    const socket = io();
+    const tempCtx = document.getElementById('tempChart').getContext('2d');
+    const humCtx = document.getElementById('humChart').getContext('2d');
+
+    const tempChart = new Chart(tempCtx, {
+      type: 'line',
+      data: { labels: [], datasets: [{ label:'Temperature (°C)', data: [] }] },
+      options: { animation:false, scales:{ x:{ type:'time', time:{ unit:'minute' } } } }
+    });
+
+    const humChart = new Chart(humCtx, {
+      type: 'line',
+      data: { labels: [], datasets: [{ label:'Humidity (%)', data: [] }] },
+      options: { animation:false, scales:{ x:{ type:'time', time:{ unit:'minute' } } } }
+    });
+
+    function pushPoint(ts, temp, hum) {
+      const t = new Date(ts);
+      tempChart.data.labels.push(t);
+      tempChart.data.datasets[0].data.push(temp);
+      humChart.data.labels.push(t);
+      humChart.data.datasets[0].data.push(hum);
+      if (tempChart.data.labels.length > 200) {
+        tempChart.data.labels.shift(); tempChart.data.datasets[0].data.shift();
+        humChart.data.labels.shift(); humChart.data.datasets[0].data.shift();
+      }
+      tempChart.update();
+      humChart.update();
+    }
+
+    fetch('/readings?limit=500').then(r=>r.json()).then(rows=>{
+      rows.forEach(r => pushPoint(r.ts, r.temperature, r.humidity));
+      document.getElementById('status').textContent = 'Connected, showing history';
+    });
+
+    socket.on('connect', () => document.getElementById('status').textContent = 'Websocket connected');
+    socket.on('reading', r => pushPoint(r.ts, r.temperature, r.humidity));
+    socket.on('webhook', p => console.log('webhook', p));
+  </script>
+</body>
+</html>
